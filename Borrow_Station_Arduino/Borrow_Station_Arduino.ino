@@ -28,6 +28,10 @@ String lastUID = "";
 unsigned long lastSentTime = 0;
 const unsigned long SCAN_COOLDOWN_MS = 2000;
 
+String nfcDetectedMessage(const String& uid) {
+  return "{\"type\":\"nfc_detected\",\"uid\":\"" + uid + "\"}";
+}
+
 // Convert UID bytes to hexadecimal text
 String uidToString(uint8_t* uid, uint8_t length) {
   String result = "";
@@ -125,10 +129,7 @@ void scanNFC() {
   lastUID = uidText;
   lastSentTime = now;
 
-  String message =
-    "{\"type\":\"nfc_detected\",\"uid\":\""
-    + uidText + "\"}";
-
+  String message = nfcDetectedMessage(uidText);
   ws.broadcastTXT(message);
 
   Serial.print("NFC UID: ");
